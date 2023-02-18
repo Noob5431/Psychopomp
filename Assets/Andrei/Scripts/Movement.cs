@@ -7,7 +7,7 @@ public class Movement : MonoBehaviour
     [SerializeField]
     private float speed,jumpForce,thrustForce;
     [SerializeField]
-    private float initial_velocity, time_to_initial_velocity, final_velocity, time_to_final_velocity;
+    public float initial_velocity, time_to_initial_velocity, final_velocity, time_to_final_velocity;
     [SerializeField]
     private float velocity;
     [SerializeField]
@@ -40,6 +40,20 @@ public class Movement : MonoBehaviour
     [SerializeField]
     float climbSpeed;
     float climbTimer;
+    [SerializeField]
+    float maxClimbTimer;
+    [SerializeField]
+    float climbJumpUpSpeed;
+    [SerializeField]
+    float climbJumpBackSpeed;
+    RaycastHit wallRightHit, wallLeftHit;
+    bool wallRight, wallLeft;
+    Vector3 bonusForce = Vector3.zero;
+    [SerializeField]
+    float airDrag;
+    [SerializeField]
+    float runWallJumpUpForce, runWallJumpBackForce;
+    public bool isRunning = false;
 
     private void Start()
     {
@@ -47,6 +61,7 @@ public class Movement : MonoBehaviour
         lookRotation = GetComponent<MouseLook>().lookRotation;
         current_rigidbody = GetComponent<Rigidbody>();
         velocity = 0;
+        climbTimer = maxClimbTimer;
     }
     private void FixedUpdate()
     {
@@ -60,17 +75,44 @@ public class Movement : MonoBehaviour
     private void Update()
     {
         WallCheck();
-        if(Input.GetMouseButtonDown(0) && !isSwinging)
+        CheckForWallRun();
+        if (isGrounded) bonusForce = Vector3.zero;
+        if (Input.GetMouseButtonDown(0) && !isSwinging)
         {
             StartSwing();
         }
-        if(Input.GetMouseButtonUp(0) && isSwinging)
+        if (Input.GetMouseButtonUp(0) && isSwinging)
         {
             StopSwing();
         }
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             OnJump();
+        }
+        if (canClimb && Input.GetKey(KeyCode.W) && wallLookAngle < maxWallLookAngle)
+        {
+            if (!isClimbing && climbTimer > 0) StartClimbing();
+            if (climbTimer > 0) climbTimer -= Time.deltaTime;
+            if (climbTimer < 0) StopClimbing();
+        }
+        else
+        {
+            if (isClimbing) StopClimbing();
+        }
+        if (isClimbing)
+        {
+            ClimbingMovement();
+        }
+        if (canClimb && Input.GetKeyDown(KeyCode.Space))
+        {
+            ClimbJump();
+        }
+        if ((wallLeft || wallRight) && Input.GetKey(KeyCode.W) && !isGrounded)
+        {
+            if(bonusForce.magnitude <0.1f)
+                current_rigidbody.velocity = new Vector3(current_rigidbody.velocity.x, 0, current_rigidbody.velocity.z);
+            if (Input.GetKeyDown(KeyCode.Space))
+                WallRunJump();
         }
     }
 
@@ -78,13 +120,24 @@ public class Movement : MonoBehaviour
     {
         DrawRope();
     }
+
+    void CheckForWallRun()
+    {
+        wallRight = Physics.Raycast(transform.position, transform.right, out wallRightHit, wallDetectionLenght);
+        wallLeft = Physics.Raycast(transform.position, -transform.right, out wallLeftHit, wallDetectionLenght);
+    }
+
     public void Run()
     {
         if (moveVector.magnitude < 0.1)
+        {
+            isRunning = false;
             velocity = 0;
+        }
         //initial acceleration
         if (moveVector.magnitude > 0.01)
         {
+            isRunning = true;
             if (velocity < initial_velocity)
             {
                 float dx = (initial_velocity * Time.deltaTime) / time_to_initial_velocity; //rate of change needed in this frame
@@ -104,13 +157,23 @@ public class Movement : MonoBehaviour
         globalMoveVector.Normalize();
 
         //apply velocity
-        current_rigidbody.velocity = new Vector3(velocity * globalMoveVector.x, current_rigidbody.velocity.y, velocity * globalMoveVector.z);
+        current_rigidbody.velocity = new Vector3(velocity * globalMoveVector.x, current_rigidbody.velocity.y, velocity * globalMoveVector.z) + bonusForce;
+
+        //apply drag
+        if(bonusForce.magnitude > 0)
+            bonusForce = bonusForce - bonusForce.normalized * airDrag * Time.deltaTime;
+        if (bonusForce.magnitude < 0)
+            bonusForce = Vector3.zero;
     }
 
     void WallCheck()
     {
-        canClimb = Physics.SphereCast(transform.position, wallSphereRadius, cam.forward, out frontWallHit, wallDetectionLenght, grappable);
-        wallLookAngle = Vector3.Angle(cam.forward, -frontWallHit.normal);
+        if(isGrounded)
+        {
+            climbTimer = maxClimbTimer;        
+        }
+        canClimb = Physics.SphereCast(transform.position, wallSphereRadius, transform.forward, out frontWallHit, wallDetectionLenght, grappable);
+        wallLookAngle = Vector3.Angle(transform.forward, -frontWallHit.normal);
     }    
 
     void SwingThrust()
@@ -183,8 +246,6 @@ public class Movement : MonoBehaviour
     private void StartClimbing()
     {
         isClimbing = true;
-
-
     }
     private void ClimbingMovement()
     {
@@ -195,5 +256,33 @@ public class Movement : MonoBehaviour
     {
         isClimbing = false;
 
+    }
+    
+    void ClimbJump()
+    {
+        current_rigidbody.velocity = new Vector3(current_rigidbody.velocity.x, 0, current_rigidbody.velocity.z);
+        Vector3 forceToApply = transform.up * climbJumpUpSpeed + frontWallHit.normal * climbJumpBackSpeed;
+        current_rigidbody.AddForce(new Vector3(0, forceToApply.y, 0),ForceMode.VelocityChange);
+        forceToApply.y = 0;
+        bonusForce += forceToApply;
+    }
+
+    void WallRunJump()
+    {
+        current_rigidbody.velocity = new Vector3(current_rigidbody.velocity.x, 0, current_rigidbody.velocity.z);
+        RaycastHit current_hit = wallRight ? wallRightHit : wallLeftHit;
+        Vector3 forceToApply = transform.up * runWallJumpUpForce + current_hit.normal * runWallJumpBackForce;
+        current_rigidbody.AddForce(new Vector3(0, forceToApply.y, 0), ForceMode.VelocityChange);
+        forceToApply.y = 0;
+        bonusForce += forceToApply;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        //Gizmos.DrawSphere(gunTip.position, maxSwingDistance);
+        Debug.DrawRay(gunTip.position, cam.forward * maxSwingDistance, Color.red);
+        Debug.DrawRay(transform.position, transform.forward * wallDetectionLenght, Color.red);
+        //Gizmos.DrawSphere(gunTip.position, wallDetectionLenght);
     }
 }

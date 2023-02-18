@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class GroundCheck : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    [SerializeField]
+    float groundCheckLenght=0.7f;
+
+    private void FixedUpdate()
     {
-        if(other.CompareTag("ground"))
-            GetComponentInParent<Movement>().isGrounded = true;
+        GetComponentInParent<Movement>().isGrounded = Physics.Raycast(transform.position,-transform.up,groundCheckLenght);
     }
-    private void OnTriggerExit(Collider other)
+
+    private void OnDrawGizmos()
     {
-        if (other.CompareTag("ground"))
-            GetComponentInParent<Movement>().isGrounded = false;
+        Debug.DrawRay(transform.position,-transform.up*groundCheckLenght);
     }
 }

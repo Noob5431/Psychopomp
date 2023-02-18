@@ -17,7 +17,7 @@ public class MouseLook : MonoBehaviour
         lookRotation = transform.localEulerAngles;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         mouseDelta = new Vector2(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"));
         lookRotation += mouseDelta * lookSpeed;
