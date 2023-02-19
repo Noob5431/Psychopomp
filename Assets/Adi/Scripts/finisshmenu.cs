@@ -16,6 +16,8 @@ public class finisshmenu : MonoBehaviour
     public bool LevelOver = false;
     Pausemenu pause;
     Pausemenu strt;
+    public bool isFinished=false;
+
     private void Start()
     {
         manager = GameObject.Find("gameManager").GetComponent<gamemanager>();
@@ -23,7 +25,7 @@ public class finisshmenu : MonoBehaviour
     }
     void Update()
     {
-        if (gameObject.GetComponent<Timer>().currentTime > 3f)
+        if (isFinished)
         {
             LevelOver = true;
             Object.Destroy(timer);
@@ -46,9 +48,6 @@ public class finisshmenu : MonoBehaviour
             }
         }
        
-
-
-
         thisTime.text = currtime.ToString("0.0");
         //gameObject.GetComponent<Timer>().currentTime.ToString("0.0");
         bestTime.text = manager.highScore.ToString("0.0");
