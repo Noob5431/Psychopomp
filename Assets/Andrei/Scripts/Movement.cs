@@ -59,6 +59,10 @@ public class Movement : MonoBehaviour
     Vector3 wallRunningRotation;
     bool isRotated = false;
     bool wasWallRight = false;
+    [SerializeField]
+    float grappleRadius;
+    [SerializeField]
+    float lateralWallDetectionLenght;
 
     private void Start()
     {
@@ -165,8 +169,8 @@ public class Movement : MonoBehaviour
 
     void CheckForWallRun()
     {
-        wallRight = Physics.Raycast(transform.position, transform.right, out wallRightHit, wallDetectionLenght);
-        wallLeft = Physics.Raycast(transform.position, -transform.right, out wallLeftHit, wallDetectionLenght);
+        wallRight = Physics.Raycast(transform.position, transform.right, out wallRightHit, lateralWallDetectionLenght);
+        wallLeft = Physics.Raycast(transform.position, -transform.right, out wallLeftHit, lateralWallDetectionLenght);
     }
 
     public void Run()
@@ -251,7 +255,7 @@ public class Movement : MonoBehaviour
     void StartSwing()
     {
         RaycastHit hit;
-        if(Physics.Raycast(cam.position,cam.forward,out hit,maxSwingDistance,grappable) && hit.collider.gameObject.CompareTag("grapple"))
+        if(Physics.SphereCast(cam.position,grappleRadius,cam.forward,out hit,maxSwingDistance,grappable) && hit.collider.gameObject.CompareTag("grapple"))
         {
             GetComponentInChildren<AudioManager>().Laser();
             isSwinging = true;
@@ -295,7 +299,7 @@ public class Movement : MonoBehaviour
     }
     private void ClimbingMovement()
     {
-        current_rigidbody.velocity = new Vector3(current_rigidbody.velocity.x, climbSpeed, current_rigidbody.velocity.z);
+        current_rigidbody.velocity = new Vector3(current_rigidbody.velocity.x, climbSpeed * Time.deltaTime * 100, current_rigidbody.velocity.z);
 
     }
     private void StopClimbing()
@@ -310,7 +314,8 @@ public class Movement : MonoBehaviour
         Vector3 forceToApply = transform.up * climbJumpUpSpeed + frontWallHit.normal * climbJumpBackSpeed;
         current_rigidbody.AddForce(new Vector3(0, forceToApply.y, 0),ForceMode.VelocityChange);
         forceToApply.y = 0;
-        bonusForce += forceToApply;
+        if(bonusForce.magnitude < forceToApply.magnitude)
+            bonusForce += forceToApply;
         GetComponentInChildren<AudioManager>().Jump();
     }
 
@@ -321,7 +326,8 @@ public class Movement : MonoBehaviour
         Vector3 forceToApply = transform.up * runWallJumpUpForce + current_hit.normal * runWallJumpBackForce;
         current_rigidbody.AddForce(new Vector3(0, forceToApply.y, 0), ForceMode.VelocityChange);
         forceToApply.y = 0;
-        bonusForce += forceToApply;
+        if(bonusForce.magnitude < forceToApply.magnitude)
+            bonusForce += forceToApply;
         GetComponentInChildren<AudioManager>().Jump();
     }
 
@@ -331,6 +337,10 @@ public class Movement : MonoBehaviour
         //Gizmos.DrawSphere(gunTip.position, maxSwingDistance);
         Debug.DrawRay(gunTip.position, cam.forward * maxSwingDistance, Color.red);
         Debug.DrawRay(transform.position, transform.forward * wallDetectionLenght, Color.red);
+        Debug.DrawRay(transform.position, transform.right * lateralWallDetectionLenght, Color.red);
+        Debug.DrawRay(transform.position, -transform.right * lateralWallDetectionLenght, Color.red);
+        Gizmos.DrawSphere(cam.forward * maxSwingDistance + transform.position, grappleRadius);
+        Gizmos.DrawSphere(transform.forward * wallDetectionLenght + transform.position, wallSphereRadius);
         //Gizmos.DrawSphere(gunTip.position, wallDetectionLenght);
     }
 }
