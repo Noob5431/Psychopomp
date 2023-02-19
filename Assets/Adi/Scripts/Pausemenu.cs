@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 public class Pausemenu : MonoBehaviour
 {
     public GameObject startText;
-    public static bool GameIsPaused = false;
-    public static bool GameHasStarted = false;
+
+    [SerializeField] public  bool GameIsPaused = false;
+    [SerializeField] public  bool GameHasStarted = false;
     public GameObject pauseMenuUI;
 
    
@@ -26,16 +27,19 @@ public class Pausemenu : MonoBehaviour
 
 
 
-        if(GameHasStarted == true)
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (GameHasStarted == true && gameObject.GetComponent<finisshmenu>().LevelOver == false)
         {
-            if(GameIsPaused)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Resume();
+                if (GameIsPaused)
+                {
+                    Resume();
 
-            }else
-            {
-                Pause();
+                }
+                else
+                {
+                    Pause();
+                }
             }
         }
     }
@@ -53,7 +57,7 @@ public class Pausemenu : MonoBehaviour
     }
     public void LoadMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex -2);
         GameIsPaused =false; 
         GameHasStarted = false;
         Time.timeScale =1f;

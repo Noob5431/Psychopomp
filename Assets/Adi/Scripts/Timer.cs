@@ -14,7 +14,9 @@ public class Timer : MonoBehaviour
     }
     void Update()
     {
-        currentTime += 1f * Time.deltaTime;
-        countdownText.text = currentTime.ToString("0.0");
+        if (gameObject.GetComponent<finisshmenu>().LevelOver == false){
+            currentTime += 1f * Time.deltaTime;
+            countdownText.text = currentTime.ToString("0.0");
+        }
     }
 }
