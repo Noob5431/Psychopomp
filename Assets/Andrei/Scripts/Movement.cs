@@ -5,13 +5,13 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     [SerializeField]
-    private float speed,jumpForce,thrustForce;
+    private float speed, jumpForce, thrustForce;
     [SerializeField]
     public float initial_velocity, time_to_initial_velocity, final_velocity, time_to_final_velocity;
     [SerializeField]
     private float velocity;
     [SerializeField]
-    Transform cam,gunTip;
+    Transform cam, gunTip;
     [SerializeField]
     LayerMask grappable;
     LineRenderer lr;
@@ -25,7 +25,7 @@ public class Movement : MonoBehaviour
     Vector3 globalMoveVector;
 
     Vector2 lookRotation;
-    public bool isGrounded,isSwinging,canClimb;
+    public bool isGrounded, isSwinging, canClimb;
     [SerializeField]
     float wallDetectionLenght;
     [SerializeField]
@@ -54,6 +54,11 @@ public class Movement : MonoBehaviour
     [SerializeField]
     float runWallJumpUpForce, runWallJumpBackForce;
     public bool isRunning = false;
+    public bool isWallRunning;
+    [SerializeField]
+    Vector3 wallRunningRotation;
+    bool isRotated = false;
+    bool wasWallRight = false;
 
     private void Start()
     {
@@ -107,12 +112,50 @@ public class Movement : MonoBehaviour
         {
             ClimbJump();
         }
+        //wall run
         if ((wallLeft || wallRight) && Input.GetKey(KeyCode.W) && !isGrounded)
         {
-            if(bonusForce.magnitude <0.1f)
+            isWallRunning = true;
+            //rotation along z
+            if (!isRotated)
+            {
+                isRotated = true;
+                if (wallLeft)
+                {
+                    wasWallRight = false;
+                    transform.Rotate(-wallRunningRotation);
+                }
+                else if (wallRight)
+                {
+                    wasWallRight = true;
+                    transform.Rotate(wallRunningRotation);
+                }
+            }
+            if (bonusForce.magnitude < 0.1f)
                 current_rigidbody.velocity = new Vector3(current_rigidbody.velocity.x, 0, current_rigidbody.velocity.z);
             if (Input.GetKeyDown(KeyCode.Space))
                 WallRunJump();
+        }
+        else
+        {
+            if (isRotated)
+            {
+                isRotated = false;
+                if (wasWallRight)
+                {
+                    Debug.Log("here");
+                    transform.Rotate(-wallRunningRotation);
+                }
+                else if (!wasWallRight)
+                {
+                    transform.Rotate(wallRunningRotation);
+                }
+            }
+            isWallRunning = false;
+        }
+        if (transform.rotation.eulerAngles.z < 0.1 && transform.rotation.eulerAngles.z > -0.1 && transform.rotation.eulerAngles.z!=0)
+        {
+            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y,0);
         }
     }
 
@@ -189,7 +232,7 @@ public class Movement : MonoBehaviour
         Vector2 input_trans = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         input_trans.Normalize();
         moveVector = new Vector3(input_trans.x, 0, input_trans.y);
-    }    
+    }
 
     public void OnJump()
     {
@@ -199,8 +242,11 @@ public class Movement : MonoBehaviour
             if (climbTimer > 0) climbTimer -= Time.deltaTime;
             if (climbTimer < 0) StopClimbing();
         }*/
-        if(isGrounded)
+        if (isGrounded)
+        {
             current_rigidbody.AddForce(jumpForce * transform.up, ForceMode.VelocityChange);
+            GetComponentInChildren<AudioManager>().Jump();
+        }
     }
   
     void StartSwing()
@@ -208,6 +254,7 @@ public class Movement : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(cam.position,cam.forward,out hit,maxSwingDistance,grappable))
         {
+            GetComponentInChildren<AudioManager>().Laser();
             isSwinging = true;
             swingPoint = hit.point;
             joint = gameObject.AddComponent<SpringJoint>();
@@ -265,6 +312,7 @@ public class Movement : MonoBehaviour
         current_rigidbody.AddForce(new Vector3(0, forceToApply.y, 0),ForceMode.VelocityChange);
         forceToApply.y = 0;
         bonusForce += forceToApply;
+        GetComponentInChildren<AudioManager>().Jump();
     }
 
     void WallRunJump()
@@ -275,6 +323,7 @@ public class Movement : MonoBehaviour
         current_rigidbody.AddForce(new Vector3(0, forceToApply.y, 0), ForceMode.VelocityChange);
         forceToApply.y = 0;
         bonusForce += forceToApply;
+        GetComponentInChildren<AudioManager>().Jump();
     }
 
     private void OnDrawGizmos()

@@ -5,8 +5,19 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     [SerializeField]
-    AudioSource land,running;
+    AudioSource land,running,jump,wind,laser;
     bool isGrounded = true, oldIsGrounded = true;
+    [SerializeField]
+    float windVolumeTransitionTime;
+    float initialWindVolume, appliedWindVolume,windVolumeEffect,targetVolume;
+
+    private void Start()
+    {
+        initialWindVolume = wind.volume;
+        wind.volume = 0;
+        wind.Play();
+        windVolumeEffect = initialWindVolume / windVolumeTransitionTime;
+    }
 
     private void Update()
     {
@@ -16,10 +27,43 @@ public class AudioManager : MonoBehaviour
         {
             land.Play();
         }
-        if (GetComponentInParent<Movement>().isRunning)
+        if ((GetComponentInParent<Movement>().isRunning && isGrounded) || GetComponentInParent<Movement>().isWallRunning)
         {
-            running.Play();
+            if(!running.isPlaying)
+                running.Play();
         }
-        //else running.Stop();
+        else running.Stop();
+        if (gameObject.GetComponentInParent<Rigidbody>().velocity.magnitude > GetComponentInParent<Movement>().final_velocity + 0.5f)
+        {
+                targetVolume = initialWindVolume;
+        }
+        else
+        {
+            targetVolume = 0;
+        }
+        if(appliedWindVolume < targetVolume)
+        {
+            appliedWindVolume += windVolumeEffect * Time.deltaTime;
+        }
+        else if(appliedWindVolume > targetVolume)
+        {
+            appliedWindVolume -= windVolumeEffect * Time.deltaTime;
+        }
+        wind.volume = appliedWindVolume;
     }
+
+    public void Jump()
+    {
+        if(!jump.isPlaying)
+        {
+            jump.Play();
+        }
+    }
+    public void Laser()
+    {
+        if(!laser.isPlaying)
+        {
+            laser.Play();
+        }
+    }    
 }
