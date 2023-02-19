@@ -143,7 +143,6 @@ public class Movement : MonoBehaviour
                 isRotated = false;
                 if (wasWallRight)
                 {
-                    Debug.Log("here");
                     transform.Rotate(-wallRunningRotation);
                 }
                 else if (!wasWallRight)
@@ -252,7 +251,7 @@ public class Movement : MonoBehaviour
     void StartSwing()
     {
         RaycastHit hit;
-        if(Physics.Raycast(cam.position,cam.forward,out hit,maxSwingDistance,grappable))
+        if(Physics.Raycast(cam.position,cam.forward,out hit,maxSwingDistance,grappable) && hit.collider.gameObject.CompareTag("grapple"))
         {
             GetComponentInChildren<AudioManager>().Laser();
             isSwinging = true;
