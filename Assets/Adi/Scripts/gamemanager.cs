@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class gamemanager : MonoBehaviour
 {
-    public float highScore;
+    public float[] highScore = { -1, -1, -1 };
     private void Start()
     {
         DontDestroyOnLoad(gameObject);

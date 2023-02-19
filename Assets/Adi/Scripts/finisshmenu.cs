@@ -17,40 +17,46 @@ public class finisshmenu : MonoBehaviour
     Pausemenu pause;
     Pausemenu strt;
     public bool isFinished=false;
+    int currentScene;
 
     private void Start()
     {
         manager = GameObject.Find("gameManager").GetComponent<gamemanager>();
+        if(SceneManager.GetActiveScene().buildIndex > 2)
+            currentScene = SceneManager.GetActiveScene().buildIndex - 3;
         
     }
     void Update()
     {
         if (isFinished)
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             LevelOver = true;
             Object.Destroy(timer);
             finishUI.SetActive(true);
             currtime = gameObject.GetComponent<Timer>().currentTime;
-            if (currtime<manager.highScore || manager.highScore ==-1)
+            if (currtime<manager.highScore[currentScene] || manager.highScore[currentScene] ==-1)
             {
-                manager.highScore = currtime;
+                manager.highScore[currentScene] = currtime;
             }
+            Time.timeScale = 0f;
         }
-        else if(Input.GetKeyDown(KeyCode.F))
+       /* else if(Input.GetKeyDown(KeyCode.F))
         {
             LevelOver = true;
             Object.Destroy(timer);
             finishUI.SetActive(true);
             currtime = gameObject.GetComponent<Timer>().currentTime;
-            if (currtime < manager.highScore || manager.highScore == -1)
+            if (currtime < manager.highScore[currentScene] || manager.highScore[currentScene] == -1)
             {
-                manager.highScore = currtime;
+                manager.highScore[currentScene] = currtime;
             }
-        }
+        }*/
        
         thisTime.text = currtime.ToString("0.0");
         //gameObject.GetComponent<Timer>().currentTime.ToString("0.0");
-        bestTime.text = manager.highScore.ToString("0.0");
+        bestTime.text = manager.highScore[currentScene].ToString("0.0");
     }
     public void rs()
     {
@@ -60,7 +66,7 @@ public class finisshmenu : MonoBehaviour
     }
     public void Sl()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        SceneManager.LoadScene(2);
     }
 
 

@@ -1259,7 +1259,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8285546484823013187}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 102.4, y: 1.27, z: -122}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8285546485863492017}
@@ -1379,7 +1379,7 @@ MonoBehaviour:
   isGrounded: 0
   isSwinging: 0
   canClimb: 0
-  wallDetectionLenght: 0.4
+  wallDetectionLenght: 0.7
   wallSphereRadius: 0.4
   maxWallLookAngle: 30
   isClimbing: 0

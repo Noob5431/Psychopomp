@@ -5,18 +5,21 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Adi/Scenes/Lore.unity
     guid: b697718c795e2ba41b3d0fa2f15c2b3e
-  - enabled: 0
-    path: Assets/Adi/Scenes/asd.unity
+  - enabled: 1
+    path: Assets/Adi/Scenes/MainMenu.unity
     guid: 1b1cbf4ab4aae774a9161b23c26a9733
-  - enabled: 0
+  - enabled: 1
     path: Assets/Adi/Scenes/level selection.unity
     guid: 3c02b459a24b9f442b7cd02b4eb724cb
-  - enabled: 0
-    path: Assets/Adi/Scenes/New Scene.unity
-    guid: 42d1e3933e1878c4c836ab9b4f3fab5d
+  - enabled: 1
+    path: Assets/Erik/level_1.unity
+    guid: 3d6e7a0967cfcc5448828695c039500b
+  - enabled: 1
+    path: Assets/Andrei/Scenes/Level2.unity
+    guid: dc3d2ba3e5db05b48adb517ca8e75637
   - enabled: 1
     path: Assets/Adi/Scenes/Level 3.unity
     guid: ec50badffaaa92d4c918b6794ae2a979

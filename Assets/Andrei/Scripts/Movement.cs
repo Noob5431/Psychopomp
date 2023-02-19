@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -66,6 +67,8 @@ public class Movement : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         lr = GetComponent<LineRenderer>();
         lookRotation = GetComponent<MouseLook>().lookRotation;
         current_rigidbody = GetComponent<Rigidbody>();
@@ -83,6 +86,10 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.R) && Time.timeScale > 0.01)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
         WallCheck();
         CheckForWallRun();
         if (isGrounded) bonusForce = Vector3.zero;
@@ -299,7 +306,7 @@ public class Movement : MonoBehaviour
     }
     private void ClimbingMovement()
     {
-        current_rigidbody.velocity = new Vector3(current_rigidbody.velocity.x, climbSpeed * Time.deltaTime * 100, current_rigidbody.velocity.z);
+        current_rigidbody.velocity = new Vector3(current_rigidbody.velocity.x, climbSpeed, current_rigidbody.velocity.z);
 
     }
     private void StopClimbing()

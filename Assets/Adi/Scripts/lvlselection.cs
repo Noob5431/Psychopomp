@@ -8,8 +8,8 @@ public class lvlselection : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
-    public void leve()
+    public void leve(int buildIndex)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(buildIndex);
     }
 }

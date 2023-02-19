@@ -7,10 +7,20 @@ using UnityEngine.UI;
 public class mainmenu : MonoBehaviour
 {
     gamemanager manager;
-    [SerializeField] Text lv1;
+    [SerializeField] Text[] levels;
+    int currentScene;
     private void Start()
     {
         manager = GameObject.Find("gameManager").GetComponent<gamemanager>();
+        for (int currentScene = 0; currentScene < 3; currentScene++)
+        {
+            if (manager.highScore[currentScene] == -1)
+            {
+                levels[currentScene].text = "None";
+            }
+            else
+                levels[currentScene].text = manager.highScore[currentScene].ToString("0.0");
+        }
     }
     public void Playgame()
     {
@@ -20,13 +30,5 @@ public class mainmenu : MonoBehaviour
     public void Quitgame()
     {
         Application.Quit();
-    }
-    private void Update()
-    {
-        if(manager.highScore ==-1)
-        {
-            lv1.text = "None";
-        }else
-        lv1.text = manager.highScore.ToString("0.0");
     }
 }
