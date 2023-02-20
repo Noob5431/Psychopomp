@@ -4505,8 +4505,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 152.5, y: 106.79}
-  m_SizeDelta: {x: 277.5935, y: 87.1099}
+  m_AnchoredPosition: {x: 150, y: 120}
+  m_SizeDelta: {x: 614.3329, y: 87.1099}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1571855577
 MonoBehaviour:
@@ -4543,7 +4543,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Title
+  m_text: Psychopomp
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 11b840c5e56ec8e4aa0c734786d93f3a, type: 2}
   m_sharedMaterial: {fileID: -823547087058478869, guid: 11b840c5e56ec8e4aa0c734786d93f3a, type: 2}
@@ -4570,8 +4570,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90
-  m_fontSizeBase: 90
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

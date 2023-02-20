@@ -67,6 +67,10 @@ public class gamemanager : MonoBehaviour
         {
             firstTime = false;
         }
+        if(scene.buildIndex > 2)
+        {
+            Time.timeScale = 0f;
+        }
     }
 
 }

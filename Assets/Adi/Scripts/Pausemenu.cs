@@ -11,11 +11,6 @@ public class Pausemenu : MonoBehaviour
      public  bool GameHasStarted = false;
     public GameObject pauseMenuUI;
 
-    private void Start()
-    {
-        Time.timeScale = 0f;
-    }
-
     void Update()
     {
         if (GameHasStarted == false)
@@ -32,7 +27,7 @@ public class Pausemenu : MonoBehaviour
 
         if (GameHasStarted == true && gameObject.GetComponent<finisshmenu>().LevelOver == false)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
                 if (GameIsPaused)
                 {
