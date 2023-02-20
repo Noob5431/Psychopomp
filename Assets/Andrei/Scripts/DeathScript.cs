@@ -5,8 +5,17 @@ using UnityEngine;
 
 public class DeathScript : MonoBehaviour
 {
+    EndTrigger endTrigger;
+
+    private void Start()
+    {
+        endTrigger = GameObject.Find("EndSoul").GetComponent<EndTrigger>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (endTrigger.isFinished)
+            endTrigger.Finish();
+        else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

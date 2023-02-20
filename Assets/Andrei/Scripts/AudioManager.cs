@@ -5,14 +5,24 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     [SerializeField]
-    AudioSource land,running,jump,wind,laser;
+    AudioSource land,running,jump,wind,laser,music;
     bool isGrounded = true, oldIsGrounded = true;
     [SerializeField]
     float windVolumeTransitionTime;
     float initialWindVolume, appliedWindVolume,windVolumeEffect,targetVolume;
 
+    gamemanager manager;
+
     private void Start()
     {
+        manager = GameObject.Find("gameManager").GetComponent<gamemanager>();
+        wind.volume = manager.effectVolume * wind.volume;
+        running.volume = manager.effectVolume * running.volume;
+        jump.volume = manager.effectVolume * jump.volume;
+        laser.volume = manager.effectVolume * laser.volume;
+        land.volume = manager.effectVolume * land.volume;
+        music.volume = manager.musicVolume * music.volume;
+
         initialWindVolume = wind.volume;
         wind.volume = 0;
         wind.Play();

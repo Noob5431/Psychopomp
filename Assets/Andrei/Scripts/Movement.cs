@@ -338,7 +338,7 @@ public class Movement : MonoBehaviour
         GetComponentInChildren<AudioManager>().Jump();
     }
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         //Gizmos.DrawSphere(gunTip.position, maxSwingDistance);
@@ -349,5 +349,5 @@ public class Movement : MonoBehaviour
         Gizmos.DrawSphere(cam.forward * maxSwingDistance + transform.position, grappleRadius);
         Gizmos.DrawSphere(transform.forward * wallDetectionLenght + transform.position, wallSphereRadius);
         //Gizmos.DrawSphere(gunTip.position, wallDetectionLenght);
-    }
+    }*/
 }

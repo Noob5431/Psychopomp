@@ -8,12 +8,15 @@ public class MouseLook : MonoBehaviour
     float lookSpeed;
     [SerializeField]
     GameObject playerCamera;
+    gamemanager manager;
 
     Vector2 mouseDelta;
     public Vector2 lookRotation;
 
     private void Start()
     {
+        manager = GameObject.Find("gameManager").GetComponent<gamemanager>();
+        lookSpeed = manager.mouseSensitivity * lookSpeed;
         lookRotation = transform.localEulerAngles;
     }
 
