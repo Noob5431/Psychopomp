@@ -11,6 +11,7 @@ public class EndTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         isFinished = true;
+        gameObject.SetActive(false);
     }
     public void Finish()
     {

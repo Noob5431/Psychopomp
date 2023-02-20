@@ -7,22 +7,25 @@ public class Pausemenu : MonoBehaviour
 {
     public GameObject startText;
 
-    [SerializeField] public  bool GameIsPaused = false;
-    [SerializeField] public  bool GameHasStarted = false;
+     public  bool GameIsPaused = false;
+     public  bool GameHasStarted = false;
     public GameObject pauseMenuUI;
 
-   
+    private void Start()
+    {
+        Time.timeScale = 0f;
+    }
+
     void Update()
     {
-        if(GameHasStarted == false)
+        if (GameHasStarted == false)
         {
-        Time.timeScale =0f;
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-                startText.SetActive(false) ;
-            Time.timeScale =1f;
-            GameHasStarted = true;
-        }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                startText.SetActive(false);
+                Time.timeScale = 1f;
+                GameHasStarted = true;
+            }
         }
 
 

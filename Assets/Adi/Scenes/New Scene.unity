@@ -372,6 +372,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8156885976408958815, guid: 54f2eaf76ef98e543aae3f73084f3288, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.a
+      value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: 8156885976636667905, guid: 54f2eaf76ef98e543aae3f73084f3288, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.a
+      value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: 8156885976636667905, guid: 54f2eaf76ef98e543aae3f73084f3288, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8156885976636667905, guid: 54f2eaf76ef98e543aae3f73084f3288, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8156885976636667905, guid: 54f2eaf76ef98e543aae3f73084f3288, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8156885976780607877, guid: 54f2eaf76ef98e543aae3f73084f3288, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8156885977489128625, guid: 54f2eaf76ef98e543aae3f73084f3288, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8156885977823917825, guid: 54f2eaf76ef98e543aae3f73084f3288, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.a
+      value: 0.39215687
+      objectReference: {fileID: 0}
     - target: {fileID: 8156885977882313368, guid: 54f2eaf76ef98e543aae3f73084f3288, type: 3}
       propertyPath: m_Name
       value: Canvas

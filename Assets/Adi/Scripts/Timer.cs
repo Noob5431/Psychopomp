@@ -10,12 +10,14 @@ public class Timer : MonoBehaviour
 
     void start()
     {
+        Time.timeScale = 0;
         currentTime = startingTime;
     }
     void Update()
     {
-        if (gameObject.GetComponent<finisshmenu>().LevelOver == false){
-            currentTime += 1f * Time.deltaTime;
+        if (gameObject.GetComponent<finisshmenu>().LevelOver == false)
+        {
+            currentTime += Time.deltaTime;
             countdownText.text = currentTime.ToString("0.0");
         }
     }
